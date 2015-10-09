@@ -17,13 +17,20 @@ namespace zl
 	{
 	private:
 		static const T zero;
+		mutable T* buffer;
+		mutable volatile int* counter; //引用计数
+		mutable int length;
+		mutable int start;
+
+		static 
 	public:
 		static ObjectString<T> Empty;
 
-		ObjectString()
-		{
+		ObjectString() :
+			buffer(nullptr), counter(nullptr), length(0), start(0) {}
 
-		}
+		ObjectString(ObjectString<T>& string) :
+			buffer()
 	};
 
 	template<typename T>
