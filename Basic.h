@@ -19,8 +19,8 @@
 namespace zl
 {
 #ifdef ZZY_MSVC
-#define INCRC(x)	(_InterlockedIncrement64(x))
-#define DECRC(x)	(_InterlockedDecrement64(x))
+#define INCRC(x)	(_InterlockedIncrement((volatile long*)(x)))
+#define DECRC(x)	(_InterlockedDecrement((volatile long*)(x)))
 #elif defined ZZY_GCC
 #define INCRC(x)	(__sync_add_and_fetch(x, 1))
 #define DECRC(x)	(__sync_sub_and_fetch(x, 1))

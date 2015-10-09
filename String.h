@@ -21,16 +21,47 @@ namespace zl
 		mutable volatile int* counter; //引用计数
 		mutable int length;
 		mutable int start;
+		mutable int capacity;
 
-		static 
+		void INC() const
+		{
+			INCRC(counter);
+		}
+
+		void DEC() const
+		{
+			if (counter)
+			{
+				if (DECRC(counter) == 0)
+				{
+					delete[] buffer;
+					delete counter;
+				}
+			}
+		}
+
 	public:
 		static ObjectString<T> Empty;
 
 		ObjectString() :
-			buffer(nullptr), counter(nullptr), length(0), start(0) {}
+			buffer(nullptr), counter(nullptr), length(0), start(0) ,capacity(0) {}
 
 		ObjectString(ObjectString<T>& string) :
-			buffer()
+			buffer(string.buffer), counter(string.counter), length(string.length), start(string.start), capacity(string.capacity)
+		{
+			INC();
+		}
+
+		ObjectString(ObjectString<T>& string, int _start, int _length) :
+			buffer(string.buffer), counter(string.counter), length(_length), start(string.start+_start), capacity(string.capacity)
+		{
+			INC();
+		}
+
+		~ObjectString()
+		{
+			DEC();
+		}
 	};
 
 	template<typename T>
