@@ -25,7 +25,8 @@ namespace zl
 
 		void INC() const
 		{
-			INCRC(counter);
+			if(counter)
+				INCRC(counter);
 		}
 
 		void DEC() const
@@ -40,11 +41,25 @@ namespace zl
 			}
 		}
 
+		static int GetCapacity(const T *_buffer)
+		{
+			const T *p = _buffer;
+			while (*p) ++p;
+			return p - _buffer + 1;
+		}
+
+
+		ObjectString(ObjectString<T>& string, int _start, int _length) :
+			buffer(string.buffer), counter(string.counter), length(_length), start(string.start + _start), capacity(string.capacity)
+		{
+			INC();
+		}
+
 	public:
 		static ObjectString<T> Empty;
 
 		ObjectString() :
-			buffer(nullptr), counter(nullptr), length(0), start(0) ,capacity(0) {}
+			buffer((T*)&zero), counter(nullptr), length(0), start(0) ,capacity(0) {}
 
 		ObjectString(ObjectString<T>& string) :
 			buffer(string.buffer), counter(string.counter), length(string.length), start(string.start), capacity(string.capacity)
@@ -52,16 +67,99 @@ namespace zl
 			INC();
 		}
 
-		ObjectString(ObjectString<T>& string, int _start, int _length) :
-			buffer(string.buffer), counter(string.counter), length(_length), start(string.start+_start), capacity(string.capacity)
+		ObjectString(const T* _buffer, int _length)
 		{
-			INC();
+			if (_length <= 0)
+				ObjectString();
+			else
+			{
+				capacity = _length;
+				buffer = new T[capacity];
+				length = _length;
+				counter = new int(1);
+				start = 0;
+				memcpy(buffer,_buffer,sizeof(T)*capacity);
+			}
+		}
+
+		ObjectString(const T* _buffer, bool copy = true)
+		{
+			if (copy)
+			{
+				capacity = GetCapacity(_buffer)-1;
+				length = capacity;
+				buffer = new T[capacity];
+				counter = new int(1);
+				start = 0;
+				memcpy(buffer,_buffer,sizeof(T)*capacity);
+			}
+			else
+			{
+				capacity = GetCapacity(_buffer)-1;
+				length = capacity;
+				buffer = _buffer;
+				start = 0;
+				counter = new int(1);
+			}
+		}
+
+		ObjectString(ObjectString<T>&& string) :
+			buffer(string.buffer), counter(string.counter),start(string.start), length(string.length), capacity(string.capacity)
+		{
+			string.buffer = (T*)&zero;
+			string.counter = nullptr;
+			string.start = 0;
+			string.length = 0;
+			string.capacity = 0;
 		}
 
 		~ObjectString()
 		{
 			DEC();
 		}
+
+		ObjectString<T>& operator=(ObjectString<T>& string)
+		{
+			if (this != &string)
+			{
+				DEC();
+				buffer = string.buffer;
+				counter = string.counter;
+				start = string.start;
+				length = string.length;
+				capacity = string.capacity;
+				INC();
+			}
+			else
+				return *this;
+		}
+
+		ObjectString<T>& operator=(ObjectString<T>&& string)
+		{
+			if (this != &string)
+			{
+				DEC();
+				buffer = string.buffer;
+				counter = string.counter;
+				start = string.start;
+				length = string.length;
+				capacity = string.capacity;
+				string.buffer = (T*)&zero;
+				string.counter = nullptr;
+				string.length = 0;
+				string.start = 0;
+				string.capacity = 0;
+			}
+			else
+				return *this;
+		}
+
+		static int Compare(ObjectString<T>& lhs, ObjectString<T>& rhs)
+		{
+			int len = lhs.length < rhs.length ? lhs.length : rhs.length;
+
+		}
+
 	};
 
 	template<typename T>
