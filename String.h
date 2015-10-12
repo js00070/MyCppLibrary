@@ -18,10 +18,10 @@ namespace zl
 	private:
 		static const T zero;
 		mutable T* buffer;
-		mutable volatile int* counter; //引用计数
-		mutable int length;
-		mutable int start;
-		mutable int capacity;
+		mutable volatile size_t* counter; //引用计数
+		mutable size_t length;
+		mutable size_t start;
+		mutable size_t capacity;
 
 		void INC() const
 		{
@@ -49,7 +49,7 @@ namespace zl
 		}
 
 
-		ObjectString(ObjectString<T>& string, int _start, int _length) :
+		ObjectString(ObjectString<T>& string, size_t _start, size_t _length) :
 			buffer(string.buffer), counter(string.counter), length(_length), start(string.start + _start), capacity(string.capacity)
 		{
 			INC();
@@ -76,7 +76,7 @@ namespace zl
 				capacity = _length;
 				buffer = new T[capacity];
 				length = _length;
-				counter = new int(1);
+				counter = new size_t(1);
 				start = 0;
 				memcpy(buffer,_buffer,sizeof(T)*capacity);
 			}
@@ -89,7 +89,7 @@ namespace zl
 				capacity = GetCapacity(_buffer)-1;
 				length = capacity;
 				buffer = new T[capacity];
-				counter = new int(1);
+				counter = new size_t(1);
 				start = 0;
 				memcpy(buffer,_buffer,sizeof(T)*capacity);
 			}
@@ -99,8 +99,17 @@ namespace zl
 				length = capacity;
 				buffer = _buffer;
 				start = 0;
-				counter = new int(1);
+				counter = new size_t(1);
 			}
+		}
+
+		ObjectString(const T ch)
+		{
+			buffer = new T[1];
+			*buffer = ch;
+			counter = new size_t(1);
+			capacity = length = 1;
+			start = 0;
 		}
 
 		ObjectString(ObjectString<T>&& string) :
@@ -116,6 +125,12 @@ namespace zl
 		~ObjectString()
 		{
 			DEC();
+		}
+
+		T& operator[](size_t index) const
+		{
+			CHECK_ERROR(index<length,L"ObjectString<T>::operator[](size_t)#Argument index not in range");
+			return *(buffer + start + index);
 		}
 
 		ObjectString<T>& operator=(ObjectString<T>& string)
@@ -153,6 +168,8 @@ namespace zl
 			else
 				return *this;
 		}
+
+		
 
 		static int Compare(ObjectString<T>& lhs, ObjectString<T>& rhs)
 		{
