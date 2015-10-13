@@ -33,6 +33,7 @@ namespace zl
 				}
 				chunkList[chunkNum - 1].next = nullptr;
 			}
+
 		};
 
 	private:
@@ -46,7 +47,7 @@ namespace zl
 			chunkRoot = blockTail->chunkList;
 		}
 
-		void* Alloc()
+		void* allocate()
 		{
 			chunk* result;
 			if (chunkRoot)
@@ -62,11 +63,26 @@ namespace zl
 			return static_cast<void*>(result);
 		}
 
-		void Free()
+		void deallocate(void* ptr)
 		{
-
+			chunk* tmpch = static_cast<chunk*>(ptr);
+			tmpch->next = chunkRoot;
+			chunkRoot = tmpch;
 		}
 
+		void FreeAll()
+		{
+			while (blockTail)
+			{
+				delete blockTail;
+				blockTail = blockTail->prev;
+			}
+		}
+
+		~_MemPool()
+		{
+			FreeAll();
+		}
 	};
 }
 
