@@ -52,6 +52,7 @@ namespace zl
 		ObjectString(ObjectString<T>& string, size_t _start, size_t _length) :
 			buffer(string.buffer), counter(string.counter), length(_length), start(string.start + _start), capacity(string.capacity)
 		{
+			CHECK_ERROR(string.length >= _length,L"ObjectString<T>::ObjectString(ObjectString<T>,size_t,size_t)#Argument index not in range");
 			INC();
 		}
 
