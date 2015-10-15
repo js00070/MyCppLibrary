@@ -58,6 +58,7 @@ namespace zl
 
 	public:
 		static ObjectString<T> Empty;
+		typedef T CharType;
 
 		ObjectString() :
 			buffer((T*)&zero), counter(nullptr), length(0), start(0) ,capacity(0) {}
@@ -184,6 +185,9 @@ namespace zl
 	const T ObjectString::zero = 0;
 	template<typename T>
 	ObjectString<T> ObjectString<T>::Empty = ObjectString<T>();
+
+	typedef ObjectString<char> AString;
+	typedef ObjectString<wchar_t> WString;
 }
 
 #endif

@@ -84,6 +84,12 @@ namespace zl
 			FreeAll();
 		}
 	};
+
+	template<typename >
+	class MemPool : virtual public Interface
+	{
+
+	};
 }
 
 #endif

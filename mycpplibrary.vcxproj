@@ -100,6 +100,7 @@
     <ClInclude Include="Basic.h" />
     <ClInclude Include="MemPool.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="StringMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
