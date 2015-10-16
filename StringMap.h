@@ -15,9 +15,10 @@ namespace zl
 	class AStringMap : public Object
 	{
 	private:
+		MemPool<TrieNode>
 		struct TrieNode
 		{
-
+			TrieNode *
 		};
 	};
 

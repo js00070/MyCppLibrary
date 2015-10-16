@@ -85,9 +85,17 @@ namespace zl
 		}
 	};
 
-	template<typename >
+	template<typename T,size_t blockSize = 32 * 1024>
 	class MemPool : virtual public Interface
 	{
+	private:
+		_MemPool<sizeof(T),blockSize> mem;
+
+	public:
+		MemPool()
+		{
+
+		}
 
 	};
 }
