@@ -28,4 +28,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="test\test.cpp">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

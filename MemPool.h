@@ -92,10 +92,34 @@ namespace zl
 		_MemPool<sizeof(T),blockSize> mem;
 
 	public:
-		MemPool()
-		{
+		typedef T value_type;
+		typedef T* pointer;
+		typedef T& reference;
+		typedef const T* const_pointer;
+		typedef const T& const_reference;
+		typedef size_t size_type;
+		typedef ptrdiff_t difference_type;
 
+		MemPool() = default;
+		~MemPool() = default;
+		
+		pointer address(reference x) const
+		{}
+
+		const_pointer address(const_reference x) const
+		{}
+
+		pointer allocate(size_type n = 1)
+		{
+			return static_cast<pointer>(mem.allocate());
 		}
+
+		void deallocate(pointer p, size_type n = 1)
+		{
+			mem.deallocate(const_cast<void*>(p));
+		}
+
+
 
 	};
 }
