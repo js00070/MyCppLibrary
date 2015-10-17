@@ -103,7 +103,7 @@
     <ClInclude Include="StringMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test\test.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -29,8 +29,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test\test.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
-    </Text>
+    </ClCompile>
   </ItemGroup>
 </Project>
