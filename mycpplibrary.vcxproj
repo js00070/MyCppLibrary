@@ -99,10 +99,12 @@
   <ItemGroup>
     <ClInclude Include="Basic.h" />
     <ClInclude Include="MemPool.h" />
+    <ClInclude Include="regex\my_re.h" />
     <ClInclude Include="String.h" />
-    <ClInclude Include="StringMap.h" />
+    <ClInclude Include="Dictionary.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="regex\my_re.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
